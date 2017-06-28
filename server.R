@@ -153,14 +153,31 @@ shinyServer(function(input, output, session) {
     if(ifvector(bchoice,4)==0){updateSliderInput(session, "uprophigh",value = 0)}
     
   })
+  
+  llinput<-reactive({
+    
+    llinput<-as.numeric(unlist(strsplit(input$mll,",")))
+    #llinput<-llinput/25.4
+    # llinput<-list(llinput)
+    
+    return(llinput)
+  })
+  observe({
+    updateRadioButtons(session, "llselect", choices = c(llinput()[[1]],llinput()[[2]],llinput()[[3]],"Show All"))
+  })
+  
+  output$text1<-renderText({
+    paste("You have selected", input$llselect)
+  })
 ######OLD CODE IS IN global.R#######
- observeEvent(input$llsimulate, {
+ #observeEvent(input$llsimulate, {
+   #if(is.null(input$b)==T){return()}else{
    #buttonstop<-1
   # input$llsimulate<-NULL
    ##Builds Set of populations
    #if(is.na(nreps)==TRUE){return() }
 
-    Build_Sim<-function(){ 
+  Build_Sim<-eventReactive(input$llsimulate,{ 
    nreps<-as.numeric(unlist(strsplit(input$nlakes,",")))  
    Linf<-as.numeric(unlist(strsplit(input$Linf,",")))                        ##1. Unlists values
    if(ifvector(Linf,1)==1){Linf<-as.numeric(unlist(strsplit(input$Linffixed,",")))##2. Checks if fixed
@@ -215,12 +232,13 @@ shinyServer(function(input, output, session) {
    #Sim_B$k<-0.4
    #Sim_B$t0<- -0.3922-0.2752*log10(Sim_B$Linf) - 1.038*log10(Sim_B$k) #(Pauly 1979)
    #Sim_B$t0<-10^Sim_B$t0
-   return(Sim_B)}
-   ##
+   return(Sim_B)
+   })##
    
 # buttonpress<-NULL #to keep program from crashing
   sim_dat<- function()
   { 
+ 
     #sim<- Raw_Spectrum_Setup()
     sim<-Build_Sim()
     #sim<-COMBOS
@@ -257,8 +275,8 @@ shinyServer(function(input, output, session) {
   }
   
   #  Adams-Bashforth
-  preppop<-reactive({
- 
+  preppop<-function(){
+   
     sim<-sim_dat()
     maxage<-10
     #sim1<-subset.data.frame(sim, lake==1)
@@ -322,11 +340,12 @@ shinyServer(function(input, output, session) {
     colnames(sim)[10]<-"F"
     colnames(sim)[14]<-"F2"
     return(sim)
-  })
+  }
+
 ######PUT SUBSET HERE TO MAKE IT GO FASTER####### #6/15/17 Not USING DURING THESIS SIMULATIONS
 vals<-function()
 {
-
+ 
   tmp<-preppop()
 
 #  tmp<-subset(tmp,
@@ -347,18 +366,8 @@ vals<-function()
   return(sim)
 }
 
-##TABLE OF INPUTS
-output$Sim_2<-renderTable(expr={
-  preppop()
-},bordered = T,hover = T,align = "c",striped = T)
-##DOWNLOAD TABLE
-output$download_table2<- downloadHandler(
-  filename = function(){'YPR_Output.csv'},
-  content = function(file) {
-    write.csv(preppop(), file)
-  })  
   ##New Attribute Table##
-  AWtables<-reactive({
+  AWtables<-function(){
     attribchoice<-input$Testattribchoices
     attribchoice[attribchoice%in%1]<-"Yield"
     attribchoice[attribchoice%in%2]<-"Avge Wt."
@@ -391,12 +400,12 @@ output$download_table2<- downloadHandler(
     tmp<-data.frame("Attribute"=attribchoice,
                     "Weight"=atscore)
     return(tmp)
-  })
+  }
     
 #####utility scores 11/30/2016 Method to Normalize utility scores
 
 #function to normalize inputs
-attrib_norm<-reactive({
+attrib_norm<-function(){
   tmp<-AWtables()
  # A_init<-c(input$Yieldweight,input$AvgWtweight,input$Hrateweight,input$QHrateweight,input$Harvestoppweight)
   A_init<-tmp$Weight
@@ -407,7 +416,7 @@ attrib_norm<-reactive({
   }
   tmp$adjweight<-A_norm
   return(tmp)
-})
+}
 #utilities<-function()
 #{
 #  weights<-list()
@@ -418,7 +427,7 @@ attrib_norm<-reactive({
 #  return(weights)
 #}
 
-LLscore<-reactive({
+LLscore<-function(){
   output<-vals()
   A_norm<-attrib_norm()
   ##RANK LENGTH LIMITS BASED ON NormalYield+NormalAvgWt
@@ -441,11 +450,9 @@ LLscore<-reactive({
   Scores$mll<-round((Scores$mll/25.4),0)
   
   return(Scores)
-})
+}
 
-output$ScoreLL<-renderTable({
-  LLscore()
-})
+
 
 ##Dynamically gives Attribute selection an updated list of choices
 #attribchoice<-reactive({
@@ -462,23 +469,10 @@ output$ScoreLL<-renderTable({
  
 
 ##Dynamically gives LL radio buttons an updated list of choices
-llinput<-reactive({
-  llinput<-unique(vals()$mll)
-  llinput<-llinput/25.4
- # llinput<-list(llinput)
-
-  return(llinput)
-})
-observe({
-  updateRadioButtons(session, "llselect", choices = c(llinput()[[1]],llinput()[[2]],llinput()[[3]],"Show All"))
-})
-
-output$text1<-renderText({
-  paste("You have selected", input$llselect)
-})
 
 
-data <- reactive({
+
+data <-function(){
   dat<-vals()
   #if(input$llselect=="Show All"){ ####11/14/16 took out if statement so the plots can have the same axes
     datt <-switch(input$datt,
@@ -497,6 +491,14 @@ data <- reactive({
   #              QualityHarvest = dat$QualityHarvest
   #              )
   #return(datt)}
+}
+
+  
+  
+
+output$ScoreLL<-renderTable({
+  input$gollsimulate
+  LLscore()
 })
 
 #DENSITY PLOT
@@ -536,6 +538,17 @@ output$plot<-renderPlot({
   #hist(data(),main=paste(datt, 'for',llselect,'inch length limit',sep=' ' ))
 })
 
+##TABLE OF INPUTS
+output$Sim_2<-renderTable(expr={
+  preppop()
+},bordered = T,hover = T,align = "c",striped = T)
+##DOWNLOAD TABLE
+output$download_table2<- downloadHandler(
+  filename = function(){'YPR_Output.csv'},
+  content = function(file) {
+    write.csv(preppop(), file)
+  })  
 
-   })
+#}
+   
 })

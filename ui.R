@@ -103,9 +103,7 @@ shinyUI(fluidPage(
         br(),br(),br(),br(),br(),br(),br()
       ),
       fluidRow(
-        br(),br(),
-        column(3, 
-               textInput("Ftmp", "Fishing Mortality",value =""))
+        br(),br()
         )),
     mainPanel(width=7,
       tabsetPanel(type = "tabs",
