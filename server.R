@@ -154,16 +154,26 @@ shinyServer(function(input, output, session) {
     
   })
   
-  llinput<-reactive({
-    
-    llinput<-as.numeric(unlist(strsplit(input$mll,",")))
+  #llinput<-reactive({
+  #  
+  #  llinput<-as.numeric(unlist(strsplit(input$mll,",")))
     #llinput<-llinput/25.4
     # llinput<-list(llinput)
     
-    return(llinput)
-  })
+  #  return(llinput)
+  #})
   observe({
-    updateRadioButtons(session, "llselect", choices = c(llinput()[[1]],llinput()[[2]],llinput()[[3]],"Show All"))
+    
+    x<-input$mll
+    llinput<-as.numeric(unlist(strsplit(input$mll,",")))
+    
+    if(length(llinput)==0){updateRadioButtons(session, "llselect", choices = c("No Length Limits Entered"))}
+    if(length(llinput)==1){updateRadioButtons(session, "llselect", choices = c(llinput[[1]]))}
+    if(length(llinput)==2){updateRadioButtons(session, "llselect", choices = c(llinput[[1]],llinput[[2]],"Show All"))}
+    if(length(llinput)==3){updateRadioButtons(session, "llselect", choices = c(llinput[[1]],llinput[[2]],llinput[[3]],"Show All"))}
+    if(length(llinput)==4){updateRadioButtons(session, "llselect", choices = c(llinput[[1]],llinput[[2]],llinput[[3]],llinput[[4]],"Show All"))}
+
+    #updateRadioButtons(session, "llselect", choices = c(x[1],x[2],x[3],"Show All"))
   })
   
   output$text1<-renderText({
