@@ -106,6 +106,23 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session, "upropmid",min=0,max = nlakes,value = 0,step =1)
       updateSliderInput(session, "uprophigh",min=0,max = nlakes,value = 0,step =1)}
   })
+  observeEvent(input$initpops2,{
+    #if(input$Sppsel=="White Crappie"){} WHEN YOU GET MORE SPECIES DATA RANGES
+    nlakes2<-input$nlakes2
+    if(is.null(nlakes2)==T) {return(NULL)}else{
+      updateSliderInput(session, "bproplow2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "bpropmid2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "bprophigh2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "Linfproplow2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "Linfpropmid2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "Linfprophigh2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "Aproplow2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "Apropmid2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "Aprophigh2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "uproplow2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "upropmid2",min=0,max = nlakes2,value = 0,step =1)
+      updateSliderInput(session, "uprophigh2",min=0,max = nlakes2,value = 0,step =1)}
+  })
   ##CONTROLS USE OF POPULATION PARAMETERS
   observeEvent(input$b,{
     bchoice<-input$b
@@ -118,6 +135,17 @@ shinyServer(function(input, output, session) {
     if(ifvector(bchoice,4)==0){updateSliderInput(session, "bprophigh",value = 0)}
     
   })
+  observeEvent(input$b2,{
+    bchoice<-input$b2
+    if(ifvector(bchoice,1)==1){updateCheckboxGroupInput(session,"b2",selected = "1")
+      updateSliderInput(session, "bproplow2",value = 0)
+      updateSliderInput(session, "bpropmid2",value = 0)
+      updateSliderInput(session, "bprophigh2",value = 0)}
+    if(ifvector(bchoice,2)==0){updateSliderInput(session, "bproplow2",value = 0)}
+    if(ifvector(bchoice,3)==0){updateSliderInput(session, "bpropmid2",value = 0)}
+    if(ifvector(bchoice,4)==0){updateSliderInput(session, "bprophigh2",value = 0)}
+    
+  })
   observeEvent(input$Linf,{
     bchoice<-input$Linf
     if(ifvector(bchoice,1)==1){updateCheckboxGroupInput(session,"Linf",selected = "1")
@@ -127,6 +155,17 @@ shinyServer(function(input, output, session) {
     if(ifvector(bchoice,2)==0){updateSliderInput(session, "Linfproplow",value = 0)}
     if(ifvector(bchoice,3)==0){updateSliderInput(session, "Linfpropmid",value = 0)}
     if(ifvector(bchoice,4)==0){updateSliderInput(session, "Linfprophigh",value = 0)}
+    
+  })
+  observeEvent(input$Linf2,{
+    bchoice<-input$Linf2
+    if(ifvector(bchoice,1)==1){updateCheckboxGroupInput(session,"Linf2",selected = "1")
+      updateSliderInput(session, "Linfproplow2",value = 0)
+      updateSliderInput(session, "Linfpropmid2",value = 0)
+      updateSliderInput(session, "Linfprophigh2",value = 0)}
+    if(ifvector(bchoice,2)==0){updateSliderInput(session, "Linfproplow2",value = 0)}
+    if(ifvector(bchoice,3)==0){updateSliderInput(session, "Linfpropmid2",value = 0)}
+    if(ifvector(bchoice,4)==0){updateSliderInput(session, "Linfprophigh2",value = 0)}
     
   })
   
@@ -141,6 +180,17 @@ shinyServer(function(input, output, session) {
     if(ifvector(bchoice,4)==0){updateSliderInput(session, "Aprophigh",value = 0)}
     
   })
+  observeEvent(input$A2,{
+    bchoice<-input$A2
+    if(ifvector(bchoice,1)==1){updateCheckboxGroupInput(session,"A2",selected = "1")
+      updateSliderInput(session, "Aproplow2",value = 0)
+      updateSliderInput(session, "Apropmid2",value = 0)
+      updateSliderInput(session, "Aprophigh2",value = 0)}
+    if(ifvector(bchoice,2)==0){updateSliderInput(session, "Aproplow2",value = 0)}
+    if(ifvector(bchoice,3)==0){updateSliderInput(session, "Apropmid2",value = 0)}
+    if(ifvector(bchoice,4)==0){updateSliderInput(session, "Aprophigh2",value = 0)}
+    
+  })
   
   observeEvent(input$uprop,{
     bchoice<-input$uprop
@@ -151,6 +201,17 @@ shinyServer(function(input, output, session) {
     if(ifvector(bchoice,2)==0){updateSliderInput(session, "uproplow",value = 0)}
     if(ifvector(bchoice,3)==0){updateSliderInput(session, "upropmid",value = 0)}
     if(ifvector(bchoice,4)==0){updateSliderInput(session, "uprophigh",value = 0)}
+    
+  })
+  observeEvent(input$uprop2,{
+    bchoice<-input$uprop2
+    if(ifvector(bchoice,1)==1){updateCheckboxGroupInput(session,"uprop2",selected = "1")
+      updateSliderInput(session, "uproplow2",value = 0)
+      updateSliderInput(session, "upropmid2",value = 0)
+      updateSliderInput(session, "uprophigh2",value = 0)}
+    if(ifvector(bchoice,2)==0){updateSliderInput(session, "uproplow2",value = 0)}
+    if(ifvector(bchoice,3)==0){updateSliderInput(session, "upropmid2",value = 0)}
+    if(ifvector(bchoice,4)==0){updateSliderInput(session, "uprophigh2",value = 0)}
     
   })
   
@@ -188,14 +249,22 @@ shinyServer(function(input, output, session) {
    #if(is.na(nreps)==TRUE){return() }
 
   Build_Sim<-eventReactive(input$llsimulate,{ 
-   nreps<-as.numeric(unlist(strsplit(input$nlakes,",")))  
+   nreps<-as.numeric(unlist(strsplit(input$nlakes,",")))
+   nreps2<-as.numeric(unlist(strsplit(input$nlakes2,","))) 
    Linf<-as.numeric(unlist(strsplit(input$Linf,",")))                        ##1. Unlists values
    if(ifvector(Linf,1)==1){Linf<-as.numeric(unlist(strsplit(input$Linffixed,",")))##2. Checks if fixed
    Linf<-rep(Linf,nreps)}else{Linf2<-sample(Linflow,input$Linfproplow,replace = T) ##3. If not fixed, samples from variable
                               Linf3<-sample(Linfmid,input$Linfpropmid,replace = T)
                               Linf4<-sample(Linfhigh,input$Linfprophigh,replace = T)
                               Linf<-c(Linf2,Linf3,Linf4)
-                              Linf<-sample(Linf)}                                                  
+                              Linf<-sample(Linf)}   
+   Linf2<-as.numeric(unlist(strsplit(input$Linf2,",")))                        ##1. Unlists values
+   if(ifvector(Linf2,1)==1){Linf2<-as.numeric(unlist(strsplit(input$Linffixed2,",")))##2. Checks if fixed
+   Linf2<-rep(Linf2,nreps)}else{Linf3<-sample(Linflow,input$Linfproplow2,replace = T) ##3. If not fixed, samples from variable
+   Linf4<-sample(Linfmid,input$Linfpropmid2,replace = T)
+   Linf5<-sample(Linfhigh,input$Linfprophigh2,replace = T)
+   Linf2<-c(Linf3,Linf4,Linf5)
+   Linf2<-sample(Linf2)}
                           
    b<-as.numeric(unlist(strsplit(input$b,",")))
    if(ifvector(b,1)==1){b<-as.numeric(unlist(strsplit(input$bfixed,",")))
@@ -204,6 +273,13 @@ shinyServer(function(input, output, session) {
                           b4<-sample(bhigh,input$bprophigh,replace = T)
                           b<-c(b2,b3,b4)
                           b<-sample(b)}
+   b2<-as.numeric(unlist(strsplit(input$b2,",")))
+   if(ifvector(b2,1)==1){b2<-as.numeric(unlist(strsplit(input$bfixed2,",")))
+   b2<-rep(b2,nreps)}else{b3<-sample(blow,input$bproplow2,replace = T)
+   b4<-sample(bmid,input$bpropmid2,replace = T)
+   b5<-sample(bhigh,input$bprophigh2,replace = T)
+   b2<-c(b3,b4,b5)
+   b2<-sample(b2)}
    
    A<-as.numeric(unlist(strsplit(input$A,",")))
    if(ifvector(A,1)==1){A<-as.numeric(unlist(strsplit(input$Afixed,",")))
@@ -212,6 +288,13 @@ shinyServer(function(input, output, session) {
                         A4<-sample(Ahigh,input$Aprophigh,replace = T)
                         A<-c(A2,A3,A4)
                         A<-sample(A)}
+   A2<-as.numeric(unlist(strsplit(input$A2,",")))
+   if(ifvector(A2,1)==1){A2<-as.numeric(unlist(strsplit(input$Afixed2,",")))
+   A2<-rep(A2,nreps)}else{A3<-sample(Alow,input$Aproplow2,replace = T)
+   A4<-sample(Amid,input$Apropmid2,replace = T)
+   A5<-sample(Ahigh,input$Aprophigh2,replace = T)
+   A2<-c(A3,A4,A5)
+   A2<-sample(A2)}
    
    uprop<-as.numeric(unlist(strsplit(input$uprop,",")))
    if(ifvector(uprop,1)==1){uprop<-as.numeric(unlist(strsplit(input$upropfixed,",")))
@@ -221,13 +304,21 @@ shinyServer(function(input, output, session) {
                                 uprop<-c(uprop2,uprop3,uprop4)
                                 uprop<-sample(uprop)#RANDOMIZES VECTOR ORDER#
                                 }
+   uprop2<-as.numeric(unlist(strsplit(input$uprop2,",")))
+   if(ifvector(uprop2,1)==1){uprop2<-as.numeric(unlist(strsplit(input$upropfixed2,",")))
+   uprop<-rep(uprop,nreps)}else{uprop3<-sample(uproplow,input$uproplow2,replace = T)
+   uprop4<-sample(upropmid,input$upropmid2,replace = T)
+   uprop5<-sample(uprophigh,input$uprophigh2,replace = T)
+   uprop2<-c(uprop3,uprop4,uprop5)
+   uprop2<-sample(uprop2)#RANDOMIZES VECTOR ORDER#
+   }
    
-   Sim_B<-data.frame("Linf"=Linf,
-                     "t0"=runif(nreps,0.15,0.22),
-                     "a"=rep(-5.6,nreps),
-                     "b"=b,
-                     "A"=A,
-                     "uprop"=uprop)
+   Sim_B<-data.frame("Linf"=c(Linf,Linf2),
+                     "t0"=runif(nreps+nreps2,0.15,0.22),
+                     "a"=rep(-5.6,nreps+nreps2),
+                     "b"=c(b,b2),
+                     "A"=c(A,A2),
+                     "uprop"=c(uprop,uprop2))
    Sim_B$a<-10^Sim_B$a
    Sim_B$Z<--log(1-Sim_B$A)
    Sim_B$u<-Sim_B$uprop*Sim_B$A

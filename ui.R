@@ -29,7 +29,7 @@ shinyUI(fluidPage(
                                                 vertical-align: middle;}")),
                actionButton("initpops",label = h5(strong("Initialize"),style = "font-family: 'times'; font-si6pt;vertical-align: middle;"))
       )),
-      h4(strong("Parameter Estimates"),style = "font-family: 'times'; font-si6pt"),
+      h4(strong("First Parameter Estimates"),style = "font-family: 'times'; font-si6pt"),
       fluidRow(   #WL and A Parameters
         column(3,
                tags$style("input[type=checkbox] {
@@ -107,6 +107,94 @@ shinyUI(fluidPage(
         )),
     mainPanel(width=7,
       tabsetPanel(type = "tabs",
+                  tabPanel("Second Population Groups",
+                           fluidRow(
+                             column(5,
+                                    textInput("nlakes2",
+                                              label =h5(strong("Number of Populations"),style = "font-family: 'times'; font-si6pt"), value = "")),
+                             column(2,
+                                    tags$head(tags$style("#initpops2 {margin-left: -22px;
+                                                         margin-top: 35px;
+                                                         background-color:orange;
+                                                         vertical-align: middle;}")),
+                                    actionButton("initpops2",label = h5(strong("Initialize"),style = "font-family: 'times'; font-si6pt;vertical-align: middle;"))
+                                    )),
+                           h4(strong("Second Parameter Estimates"),style = "font-family: 'times'; font-si6pt"),
+                           fluidRow(   #WL and A Parameters
+                             column(3,
+                                    tags$style("input[type=checkbox] {
+                                               transform: scale(1.0);
+                                               }"),
+               tags$head(tags$style("#b2 {font-size:33px;height:40px;margin-top: -22px;}"),
+                         tags$style("#A2 {font-size:33px;height:40px;margin-top: -22px;}"),
+                         tags$style("#Linf2 {font-size:33px;height:40px;margin-top: -22px;}"),
+                         tags$style("#uprop2 {font-size:33px;height:40px;margin-top: -22px;}")),
+               
+               checkboxGroupInput("b2",strong("Weight-Length:",style = "font-family: 'times'; font-si6pt"), 
+                                  c("High"=4,"Medium"=3,"Low"=2,"Fixed"=1), selected=1)),
+               column(3,
+                      div(style="height:25px;",
+                          #textInput("bprophigh",label= strong("Proportion (%)",style = "font-family: 'times'; font-si6pt"), value = 33),
+                          sliderInput("bprophigh2",label= strong("Proportion (%)",style = "font-family: 'times'; font-si6pt"),min = 0,max = 100,value = 33,ticks = F,round=T),
+                          #tags$head(tags$style(type="text/css", "#bprophigh {height: 10px; font-size: 12px;}")),
+                          #textInput("bpropmid",label= NULL, value = 33),
+                          sliderInput("bpropmid2",label= NULL,min = 0,max = 100,value = 33,ticks = F,round=T),
+                          #tags$head(tags$style(type="text/css", "#bpropmid {height: 20px; font-size: 12px;}")),
+                          #textInput("bproplow",label= NULL, value = 33),
+                          sliderInput("bproplow2",label= NULL,min = 0,max = 100,value = 33,ticks = F,round=T),
+                          textInput("bfixed2",label = strong("Fixed Value:",style = "font-family: 'times'; font-si6pt"),value = ""),
+                          tags$head(tags$style(type="text/css", "#bfixed2 {height: 20px; font-size: 12px;}"))),
+                      br()
+               ),
+               column(3,
+                      checkboxGroupInput("A2", strong("Annual Mortality:",style = "font-family: 'times'; font-si6pt"),
+                                         c("High"=4,"Medium"=3,"Low"=2,"Fixed"=1), selected=1)),
+               column(3,
+                      div(style="height:25px;",
+                          sliderInput("Aprophigh2",label= strong("Proportion (%)",style = "font-family: 'times'; font-si6pt"),min = 0,max = 100,value = 33,ticks = F),
+                          sliderInput("Apropmid2",label= NULL,min = 0,max = 100,value = 33,ticks = F),
+                          sliderInput("Aproplow2",label= NULL,min = 0,max = 100,value = 33,ticks = F),
+                          textInput("Afixed2",label = strong("Fixed Value:",style = "font-family: 'times'; font-si6pt"),value = ""),
+                          tags$head(tags$style(type="text/css", "#Afixed2 {height: 20px; font-size: 12px;}"))),
+                      br()
+               )),
+               br(),
+               br(),
+               br(),br(),br(),br(),br(),br(),br(),br(),
+               fluidRow(   #VBGF and uprop Parameters
+                 column(3,
+                        checkboxGroupInput("Linf2",strong("Length-at-Age:",style = "font-family: 'times'; font-si6pt"),
+                                           c("Fast"=4,"Medium"=3,"Slow"=2,"Fixed"=1), selected=1)),
+                 column(3,
+                        div(style="height:25px;",
+                            sliderInput("Linfprophigh2",label= strong("Proportion (%)",style = "font-family: 'times'; font-si6pt"),min = 0,max = 100,value = 33,ticks = F),
+                            sliderInput("Linfpropmid2",label= NULL,min = 0,max = 100,value = 33,ticks = F),
+                            sliderInput("Linfproplow2",label= NULL,min = 0,max = 100,value = 33,ticks = F),
+                            textInput("Linffixed2",label = strong("Fixed Value:",style = "font-family: 'times'; font-si6pt"),value = ""),
+                            tags$head(tags$style(type="text/css", "#Linffixed2 {height: 20px; font-size: 12px;}"))),
+                        br()
+                 ),
+                 column(3,
+                        checkboxGroupInput("uprop2", strong("Exploitation:",style = "font-family: 'times'; font-si6pt"),
+                                           c("High"=4,"Medium"=3,"Low"=2,"Fixed"=1), selected=1)),
+                 column(3,
+                        div(style="height:25px;",
+                            sliderInput("uprophigh2",label= strong("Proportion (%)",style = "font-family: 'times'; font-si6pt"),min = 0,max = 100,value = 33,ticks = F),
+                            sliderInput("upropmid2",label= NULL,min = 0,max = 100,value = 33,ticks = F),
+                            sliderInput("uproplow2",label= NULL,min = 0,max = 100,value = 33,ticks = F),
+                            textInput("upropfixed2",label = strong("Fixed Value:",style = "font-family: 'times'; font-si6pt"),value = ""),
+                            tags$head(tags$style(type="text/css", "#upropfixed2 {height: 20px; font-size: 12px;}"))),
+                        br()
+                 )),
+               fluidRow(
+                 br(),br(),br()
+               ),
+               fluidRow(
+                 br(),br(),br(),br(),br(),br(),br()
+               ),
+               fluidRow(
+                 br(),br()
+               )), #END TAB PANEL
                   tabPanel("Length Limits & Scores", 
                            fluidRow(
                              column(4,
