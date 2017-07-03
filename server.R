@@ -13,6 +13,7 @@ shinyServer(function(input, output, session) {
     attribchoice[attribchoice%in%4]<-"Big Fish Harvest"
     attribchoice[attribchoice%in%5]<-"Harvest Opp."
     attribchoice[attribchoice%in%6]<-"Quality Harvest Opp."
+    attribchoice[attribchoice%in%7]<-"Growth Overfishing Penalty"
     
     if(length(attribchoice)==1){updateSliderInput(session, "testattrib1",label = attribchoice[1],min = 0, max=100, value = 100,step=1)}
     if(length(attribchoice)==2){updateSliderInput(session, "testattrib2",label = attribchoice[1],min = 0, max=100, value = 50,step=1)
@@ -35,6 +36,13 @@ shinyServer(function(input, output, session) {
       updateSliderInput(session, "testattrib19",label = attribchoice[4],min = 0, max=100, value = 16,step=1)
       updateSliderInput(session, "testattrib20",label = attribchoice[5],min = 0, max=100, value = 16,step=1)
       updateSliderInput(session, "testattrib21",label = attribchoice[6],min = 0, max=100, value = 16,step=1)}
+    if(length(attribchoice)==7){updateSliderInput(session, "testattrib22",label = attribchoice[1],min = 0, max=100, value = 14,step=1)
+      updateSliderInput(session, "testattrib23",label = attribchoice[2],min = 0, max=100, value = 14,step=1)
+      updateSliderInput(session, "testattrib24",label = attribchoice[3],min = 0, max=100, value = 14,step=1)
+      updateSliderInput(session, "testattrib25",label = attribchoice[4],min = 0, max=100, value = 14,step=1)
+      updateSliderInput(session, "testattrib26",label = attribchoice[5],min = 0, max=100, value = 14,step=1)
+      updateSliderInput(session, "testattrib27",label = attribchoice[6],min = 0, max=100, value = 14,step=1)
+      updateSliderInput(session, "testattrib28",label = attribchoice[7],min = 0, max=100, value = 14,step=1)}
     
     AWtable<-reactive({
       if(length(attribchoice)==1){atscore<-c(input$testattrib1)}
@@ -58,7 +66,13 @@ shinyServer(function(input, output, session) {
                                              input$testattrib19,
                                              input$testattrib20,
                                              input$testattrib21)}
-      
+      if(length(attribchoice)==7){atscore<-c(input$testattrib22,
+                                             input$testattrib23,
+                                             input$testattrib24,
+                                             input$testattrib25,
+                                             input$testattrib26,
+                                             input$testattrib27,
+                                             input$testattrib28)}
       tmp<-data.frame("Attribute"=attribchoice,
                       "Weight"=atscore)
       return(tmp)
@@ -476,6 +490,7 @@ vals<-function()
     attribchoice[attribchoice%in%4]<-"Big Fish Harvest"
     attribchoice[attribchoice%in%5]<-"Harvest Opp."
     attribchoice[attribchoice%in%6]<-"Quality Harvest Opp."
+    attribchoice[attribchoice%in%7]<-"Growth Overfishing Penalty"
     if(length(attribchoice)==1){atscore<-c(input$testattrib1)}
     if(length(attribchoice)==2){atscore<-c(input$testattrib2,
                                            input$testattrib3)}
@@ -497,6 +512,13 @@ vals<-function()
                                            input$testattrib19,
                                            input$testattrib20,
                                            input$testattrib21)}
+    if(length(attribchoice)==7){atscore<-c(input$testattrib22,
+                                           input$testattrib23,
+                                           input$testattrib24,
+                                           input$testattrib25,
+                                           input$testattrib26,
+                                           input$testattrib27,
+                                           input$testattrib28)}
     
     tmp<-data.frame("Attribute"=attribchoice,
                     "Weight"=atscore)
@@ -538,16 +560,19 @@ LLscore<-function(){
   scoringQHrate<-aggregate(QualityHarvest~mll,output,mean)
   scoringHopp<-aggregate(Harvestopp~mll,output,mean)#4/3/2017
   scoringQHopp<-aggregate(QHarvestopp~mll,output,mean)#6/12/2017
-  scoringGoverfishing<-aggregate(GrowthOverfishing~mll,output,mean) #6/25/2017 NOT YET INCLUDED IN TOTAL SCORE
+  scoringGoverfishing<-aggregate(GrowthOverfishing~mll,output,mean) 
   Scores<-join_all(list(scoringYield,scoringAvgWt,scoringHrate,scoringQHrate,scoringHopp,scoringQHopp,scoringGoverfishing),by="mll") #4/3/17
+  
   #Scores<-merge(scoringYield,scoringAvgWt,scoringHrate,scoringQHrate,by="mll")
   Scores$Yieldscore<-((Scores$Yab-min(Scores$Yab))/(max(Scores$Yab)-min(Scores$Yab)))*100*A_norm[which(A_norm$Attribute=="Yield"),3]
   Scores$AvgWtscore<-((Scores$AvgWt-min(Scores$AvgWt))/(max(Scores$AvgWt)-min(Scores$AvgWt)))*100*A_norm[which(A_norm$Attribute=="Avge Wt."),3]
   Scores$Hratescore<-((Scores$Harvestrate-min(Scores$Harvestrate))/(max(Scores$Harvestrate)-min(Scores$Harvestrate)))*100*A_norm[which(A_norm$Attribute=="Harvest Rate"),3]
   Scores$QHratescore<-((Scores$QualityHarvest-min(Scores$QualityHarvest))/(max(Scores$QualityHarvest)-min(Scores$QualityHarvest)))*100*A_norm[which(A_norm$Attribute=="Big Fish Harvest"),3]
+  Scores$GOscore<-ifelse(Scores$GrowthOverfishing-max(Scores$GrowthOverfishing)==0,0,
+                         ifelse(Scores$GrowthOverfishing-min(Scores$GrowthOverfishing)==0,100*A_norm[which(A_norm$Attribute=="Growth Overfishing Penalty"),3],((Scores$GrowthOverfishing-min(Scores$GrowthOverfishing))/(max(Scores$GrowthOverfishing)-min(Scores$GrowthOverfishing)))*100*A_norm[which(A_norm$Attribute=="Growth Overfishing Penalty"),3])) #Subtracts This Score So It Is Treated As A Penalty
   Scores$Harvestoppscore<-ifelse((max(Scores$Harvestopp)-min(Scores$Harvestopp))!=0,((Scores$Harvestopp-min(Scores$Harvestopp))/(max(Scores$Harvestopp)-min(Scores$Harvestopp)))*100*A_norm[which(A_norm$Attribute=="Harvest Opp."),3],100*A_norm[which(A_norm$Attribute=="Harvest Opp."),3])
   Scores$QHarvestoppscore<-ifelse((max(Scores$QHarvestopp)-min(Scores$QHarvestopp))!=0,((Scores$QHarvestopp-min(Scores$QHarvestopp))/(max(Scores$QHarvestopp)-min(Scores$QHarvestopp)))*100*A_norm[which(A_norm$Attribute=="Quality Harvest Opp."),3],100*A_norm[which(A_norm$Attribute=="Quality Harvest Opp."),3])
-  Scores$Total<-Scores$Yieldscore+Scores$AvgWtscore+Scores$Hratescore+Scores$QHratescore+Scores$Harvestoppscore+Scores$QHarvestoppscore
+  Scores$Total<-Scores$Yieldscore+Scores$AvgWtscore+Scores$Hratescore+Scores$QHratescore+Scores$Harvestoppscore+Scores$QHarvestoppscore+Scores$GOscore
   Scores$mll<-round((Scores$mll/25.4),0)
   
   return(Scores)
